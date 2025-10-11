@@ -1,0 +1,13 @@
+<ul class="categoryList">
+  <li class="category">
+    <a href="/categories/">All</a>
+  </li>
+  <% categoryRows.forEach(category => { %>
+  <li class="category">
+    <a href="/categories/<%=category.id%>"><%=category.name%></a>
+  </li>
+  <% }) %>
+  <li class="category">
+    <a href="/categories/uncategorized">Uncategorized</a>
+  </li>
+</ul>

@@ -5,7 +5,7 @@ const app = express()
 const path = require("node:path")
 
 //import routers
-const indexRouter = require("./routes/indexRouter")
+const categoryRouter = require("./routes/categoryRouter")
 
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
@@ -14,7 +14,20 @@ app.use(express.urlencoded({ extended: true }))
 const PORT = process.env.PORT || 3000
 
 //// routers
-app.use("/", indexRouter)
+
+// categoryRouter
+
+// categories/                  --for "ALL" section
+// categories/edit              --for adding/removing/updating categories
+// categories/uncategorized     --for "UNCATEGORIZED" section
+// categories/:categoryId       --for browsing specific categories
+
+// itemRouter
+
+// items/new                    --for adding new items
+// items/:itemId                --for updating/removing particular items
+
+app.use("/categories", categoryRouter)
 
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "public", "404.html"))
