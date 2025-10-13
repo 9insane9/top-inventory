@@ -13,11 +13,22 @@ addBtn.addEventListener("click", () => {
 })
 
 document.querySelectorAll(".editBtn").forEach((btn) => {
-  btn.addEventListener("click", (e) => {
+  btn.addEventListener("click", async (e) => {
     const li = e.target.closest("li")
     currentId = li.dataset.id
-    nameInput.value = li.querySelector("span").textContent
-    dialog.showModal()
+
+    try {
+      const res = await fetch(`/api/categories/${currentId}`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+
+      const category = await res.json()
+      nameInput.value = category.name
+
+      dialog.showModal()
+    } catch (err) {
+      console.error("Failed to fetch category data:", err)
+      alert("Couldn't fetch category data — please try again.")
+    }
   })
 })
 
@@ -28,14 +39,13 @@ document.getElementById("cancelBtn").addEventListener("click", () => {
 
 // submission
 form.addEventListener("submit", async (e) => {
-  e.preventDefault() // prevent normal submit
+  e.preventDefault()
+
   const name = nameInput.value.trim()
   if (!name) return
 
   const method = currentId ? "PUT" : "POST"
   const url = currentId ? `/categories/${currentId}` : "/categories/new"
-
-  console.log(`Sending ${method} request to ${url} with name="${name}"`)
 
   try {
     const res = await fetch(url, {
@@ -45,7 +55,6 @@ form.addEventListener("submit", async (e) => {
     })
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
-
     dialog.close()
     location.reload()
   } catch (err) {
@@ -58,8 +67,10 @@ form.addEventListener("submit", async (e) => {
 document.querySelectorAll(".deleteBtn").forEach((btn) => {
   btn.addEventListener("click", async (e) => {
     if (!confirm("Delete this category?")) return
+
     const li = e.target.closest("li")
     const id = li.dataset.id
+
     try {
       const res = await fetch(`/categories/${id}`, { method: "DELETE" })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)

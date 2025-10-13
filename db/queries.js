@@ -1,5 +1,19 @@
 const pool = require("../db/pool")
 
+//single entries
+async function getCategoryById(id) {
+  const result = await pool.query("SELECT * FROM categories WHERE id = $1", [
+    id,
+  ])
+  return result.rows[0]
+}
+
+async function getItemById(id) {
+  const result = await pool.query("SELECT * FROM items WHERE id = $1", [id])
+  return result.rows[0]
+}
+
+// lists
 async function getItemsByCategory(categoryId) {
   let query
   let values = []
@@ -37,6 +51,7 @@ async function getCategories() {
   return rows
 }
 
+// categories
 async function addCategory(name) {
   await pool.query("INSERT INTO categories (name) VALUES ($1)", [name])
 }
@@ -49,6 +64,7 @@ async function deleteCategory(id) {
   await pool.query("DELETE FROM categories WHERE id = $1", [id])
 }
 
+// items
 async function addItem(name, price, quantity) {
   await pool.query(
     "INSERT INTO items (name, price, quantity) VALUES ($1, $2, $3)",
@@ -68,6 +84,8 @@ async function deleteItem(id) {
 }
 
 module.exports = {
+  getCategoryById,
+  getItemById,
   getItemsByCategory,
   getCategories,
   addCategory,

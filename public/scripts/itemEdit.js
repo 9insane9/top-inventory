@@ -1,6 +1,8 @@
 const dialog = document.getElementById("itemDialog")
 const form = document.getElementById("itemForm")
 const nameInput = document.getElementById("itemNameInput")
+const priceInput = document.getElementById("itemPriceInput")
+const quantityInput = document.getElementById("itemQuantityInput")
 const addBtn = document.getElementById("addItemBtn")
 
 let currentId = null // null = add, number = edit
@@ -14,18 +16,25 @@ addBtn.addEventListener("click", () => {
 
 // edit
 document.querySelectorAll(".editItemBtn").forEach((btn) => {
-  btn.addEventListener("click", (e) => {
+  btn.addEventListener("click", async (e) => {
     const li = e.target.closest("li")
     currentId = li.dataset.id
 
-    // prefill all fields
-    nameInput.value = li.querySelector(".itemName").textContent
-    document.getElementById("itemPriceInput").value =
-      li.querySelector(".itemPrice").textContent
-    document.getElementById("itemQuantityInput").value =
-      li.querySelector(".itemQuantity").textContent
+    try {
+      const res = await fetch(`/api/items/${currentId}`)
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
 
-    dialog.showModal()
+      const item = await res.json()
+
+      nameInput.value = item.price
+      priceInput.value = item.price
+      quantityInput.value = item.quantity
+
+      dialog.showModal()
+    } catch (err) {
+      console.error("Failed to fetch item data:", err)
+      alert("Couldn't fetch item data — please try again.")
+    }
   })
 })
 

@@ -24,7 +24,6 @@ async function getRenderCategoryEditor(req, res) {
 }
 
 async function addCategory(req, res) {
-  console.log("POST body:", req.body)
   try {
     const { name } = req.body
     await db.addCategory(name)

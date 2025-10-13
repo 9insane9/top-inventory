@@ -8,6 +8,7 @@ const path = require("node:path")
 const categoryRouter = require("./routes/categoryRouter")
 const resetRouter = require("./routes/resetRouter")
 const itemRouter = require("./routes/itemRouter")
+const apiRouter = require("./routes/apiRouter")
 
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
@@ -33,6 +34,7 @@ const PORT = process.env.PORT || 3000
 // items/:itemId                --for updating/removing particular items
 
 app.use("/reset", resetRouter)
+app.use("/api", apiRouter)
 app.use("/categories", categoryRouter)
 app.use("/items", itemRouter)
 
