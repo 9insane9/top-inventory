@@ -83,6 +83,46 @@ async function deleteItem(id) {
   await pool.query("DELETE FROM items WHERE id = $1", [id])
 }
 
+// item categories
+async function getCategoriesForItem(itemId) {
+  const query = `
+    SELECT c.id, c.name
+    FROM categories c
+    JOIN item_categories ic ON c.id = ic.category_id
+    WHERE ic.item_id = $1
+  `
+  const { rows } = await pool.query(query, [itemId])
+  return rows
+}
+
+async function setCategoriesForItem(itemId, categoryIds = []) {
+  const client = await pool.connect()
+  try {
+    await client.query("BEGIN")
+
+    await client.query("DELETE FROM item_categories WHERE item_id = $1", [
+      itemId,
+    ])
+
+    if (categoryIds.length) {
+      const insertValues = categoryIds
+        .map((id, index) => `($1, $${index + 2})`)
+        .join(", ")
+      await client.query(
+        `INSERT INTO item_categories (item_id, category_id) VALUES ${insertValues}`,
+        [itemId, ...categoryIds]
+      )
+    }
+
+    await client.query("COMMIT")
+  } catch (err) {
+    await client.query("ROLLBACK")
+    throw err
+  } finally {
+    client.release()
+  }
+}
+
 module.exports = {
   getCategoryById,
   getItemById,
@@ -94,4 +134,6 @@ module.exports = {
   addItem,
   updateItem,
   deleteItem,
+  getCategoriesForItem,
+  setCategoriesForItem,
 }

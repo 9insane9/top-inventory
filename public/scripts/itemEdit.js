@@ -1,9 +1,10 @@
+const addBtn = document.getElementById("addItemBtn")
 const dialog = document.getElementById("itemDialog")
 const form = document.getElementById("itemForm")
 const nameInput = document.getElementById("itemNameInput")
 const priceInput = document.getElementById("itemPriceInput")
 const quantityInput = document.getElementById("itemQuantityInput")
-const addBtn = document.getElementById("addItemBtn")
+const categoryChecklist = document.getElementById("categoryChecklist")
 
 let currentId = null // null = add, number = edit
 
@@ -26,14 +27,25 @@ document.querySelectorAll(".editItemBtn").forEach((btn) => {
 
       const item = await res.json()
 
-      nameInput.value = item.price
+      nameInput.value = item.name
       priceInput.value = item.price
       quantityInput.value = item.quantity
 
+      const resCats = await fetch(`/items/${currentId}/categories`)
+      if (!resCats.ok) throw new Error(`HTTP ${resCats.status}`)
+      const itemCategoryIds = (await resCats.json()).map((c) => c.id)
+
+      // prefill checkboxes
+      categoryChecklist
+        .querySelectorAll("input[type=checkbox]")
+        .forEach((cb) => {
+          cb.checked = itemCategoryIds.includes(parseInt(cb.value))
+        })
+
       dialog.showModal()
     } catch (err) {
-      console.error("Failed to fetch item data:", err)
-      alert("Couldn't fetch item data — please try again.")
+      console.error("Failed to fetch item data or categories:", err)
+      alert("Couldn't fetch data — please try again.")
     }
   })
 })
@@ -43,7 +55,7 @@ document.getElementById("cancelBtn").addEventListener("click", () => {
   dialog.close()
 })
 
-// submission
+// submit
 form.addEventListener("submit", async (e) => {
   e.preventDefault()
 
@@ -53,24 +65,37 @@ form.addEventListener("submit", async (e) => {
 
   if (!name || !price || !quantity) return alert("Please fill all fields")
 
+  const categoryIds = Array.from(
+    categoryChecklist.querySelectorAll("input[type=checkbox]:checked")
+  ).map((cb) => parseInt(cb.value))
+
   const method = currentId ? "PUT" : "POST"
   const url = currentId ? `/items/${currentId}` : "/items/new"
 
-  console.log(`Sending ${method} request to ${url}`)
-
   try {
-    const res = await fetch(url, {
+    // update main item data
+    const resItem = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, price, quantity }),
     })
 
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    if (!resItem.ok) throw new Error(`HTTP ${resItem.status}`)
+
+    // update categories for item
+    if (currentId) {
+      const resCats = await fetch(`/items/${currentId}/categories`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categoryIds }),
+      })
+      if (!resCats.ok) throw new Error(`HTTP ${resCats.status}`)
+    }
 
     dialog.close()
     location.reload()
   } catch (err) {
-    console.error("Error saving item:", err)
+    console.error("Error saving item or categories:", err)
     alert("Failed to save item")
   }
 })

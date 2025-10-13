@@ -34,8 +34,35 @@ async function deleteItem(req, res) {
   }
 }
 
+// item categories
+
+async function getItemCategories(req, res) {
+  const { id } = req.params
+  try {
+    const categories = await db.getCategoriesForItem(id)
+    res.json(categories)
+  } catch (err) {
+    console.error("Error fetching item categories:", err)
+    res.status(500).json({ error: "Failed to fetch categories" })
+  }
+}
+
+async function setItemCategories(req, res) {
+  const { id } = req.params
+  const { categoryIds } = req.body
+  try {
+    await db.setCategoriesForItem(id, categoryIds)
+    res.json({ success: true })
+  } catch (err) {
+    console.error("Error setting item categories:", err)
+    res.status(500).json({ error: "Failed to update categories" })
+  }
+}
+
 module.exports = {
   addItem,
   updateItem,
   deleteItem,
+  getItemCategories,
+  setItemCategories,
 }

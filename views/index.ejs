@@ -23,8 +23,12 @@
         <input type="number" id="itemPriceInput" name="price" required />
         <label for="itemQuantityInput">Quantity:</label>
         <input type="number" id="itemQuantityInput" name="quantity" required />
-        <button type="submit">Save</button>
-        <button type="button" id="cancelBtn">Cancel</button>
+        <%- include('partials/categoryChecklist', { categories: categoryRows })
+        %>
+        <div class="itemFormControls">
+          <button type="submit">Save</button>
+          <button type="button" id="cancelBtn">Cancel</button>
+        </div>
       </form>
     </dialog>
 

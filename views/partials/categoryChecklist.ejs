@@ -1,0 +1,12 @@
+<div id="categoryChecklist">
+  <% categories.forEach(category => { %>
+  <div class="categoryCheckbox">
+    <input
+      type="checkbox"
+      id="category-<%= category.id %>"
+      value="<%= category.id %>"
+    />
+    <label for="category-<%= category.id %>"><%= category.name %></label>
+  </div>
+  <% }) %>
+</div>
