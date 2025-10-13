@@ -1,13 +1,18 @@
 <ul class="categoryList">
-  <li class="category">
+  <li class="category <%= categoryId === undefined ? 'currentCategory' : ''%>">
     <a href="/categories/">All</a>
   </li>
   <% categoryRows.forEach(category => { %>
-  <li class="category">
+  <li
+    class="category <%= categoryId === category.id ? 'currentCategory' : ''%>"
+  >
     <a href="/categories/<%=category.id%>"><%=category.name%></a>
   </li>
   <% }) %>
-  <li class="category">
+  <li class="category <%= categoryId === null ? 'currentCategory' : ''%>">
     <a href="/categories/uncategorized">Uncategorized</a>
+  </li>
+  <li class="category">
+    <a href="/categories/edit">Edit</a>
   </li>
 </ul>

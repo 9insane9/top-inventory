@@ -82,6 +82,10 @@ INSERT INTO items (name, price, quantity) VALUES
   ('Tome of History', 80, 5),
   ('Adventurer''s Guide', 60, 7);
 
+-- Uncategorized 
+INSERT INTO items (name, price, quantity) VALUES
+  ('Gold', 1, 100);
+
 -- Weapons = 1
 INSERT INTO item_categories (item_id, category_id) VALUES
   (1, 1), (2, 1), (3, 1);

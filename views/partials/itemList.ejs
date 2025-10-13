@@ -1,10 +1,14 @@
-<ul class="productList">
+<ul class="itemList">
   <% itemRows.forEach(item => { %>
 
-  <li class="product">
-    <span><%=item.name%></span>
-    <span><%=item.price%></span>
-    <span><%=item.quantity%></span>
+  <li class="item" data-id="<%= item.id %>">
+    <span class="itemName"><%=item.name%></span>
+    <span class="itemPrice"><%=item.price%></span>
+    <span class="itemQuantity"><%=item.quantity%></span>
+    <div class="itemControls">
+      <button class="editItemBtn">Edit</button>
+      <button class="deleteItemBtn">Delete</button>
+    </div>
   </li>
   <% }) %>
 </ul>

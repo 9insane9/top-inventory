@@ -6,10 +6,15 @@ const path = require("node:path")
 
 //import routers
 const categoryRouter = require("./routes/categoryRouter")
+const resetRouter = require("./routes/resetRouter")
+const itemRouter = require("./routes/itemRouter")
 
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
+
+app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(express.static("public"))
 
 const PORT = process.env.PORT || 3000
 
@@ -27,7 +32,9 @@ const PORT = process.env.PORT || 3000
 // items/new                    --for adding new items
 // items/:itemId                --for updating/removing particular items
 
+app.use("/reset", resetRouter)
 app.use("/categories", categoryRouter)
+app.use("/items", itemRouter)
 
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "public", "404.html"))

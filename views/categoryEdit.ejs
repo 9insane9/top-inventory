@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>General Store</title>
+  </head>
+  <body>
+    <button id="addCategoryBtn">Add New Category</button>
+
+    <ul class="categoryList">
+      <% categoryRows.forEach(category => { %>
+      <li class="categoryItem" data-id="<%= category.id %>">
+        <span><%= category.name %></span>
+        <button class="editBtn">Edit</button>
+        <button class="deleteBtn">Delete</button>
+      </li>
+      <% }) %>
+    </ul>
+
+    <dialog id="categoryDialog">
+      <form id="categoryForm">
+        <label for="categoryName">Name:</label>
+        <input type="text" id="categoryName" name="name" required />
+        <button type="submit">Save</button>
+        <button type="button" id="cancelBtn">Cancel</button>
+      </form>
+    </dialog>
+
+    <script src="/scripts/categoryEdit.js"></script>
+  </body>
+</html>

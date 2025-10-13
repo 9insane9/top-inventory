@@ -1,0 +1,36 @@
+* {
+  box-sizing: border-box;
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.itemControls {
+}
+
+/* .allCategoriesContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryContainer {
+  display: flex;
+  width: 80%;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid goldenrod;
+  list-style-type: none;
+} */
