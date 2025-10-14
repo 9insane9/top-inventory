@@ -1,4 +1,4 @@
-const db = require("../db/queries")
+const db = require("../db/queries/queries")
 
 async function getRenderItemList(req, res) {
   let categoryId
@@ -25,8 +25,8 @@ async function getRenderCategoryEditor(req, res) {
 
 async function addCategory(req, res) {
   try {
-    const { name } = req.body
-    await db.addCategory(name)
+    const { name, icon_id } = req.body
+    await db.addCategory(name, icon_id)
     res.sendStatus(200)
   } catch (err) {
     console.error("Error adding category:", err)
@@ -36,9 +36,9 @@ async function addCategory(req, res) {
 
 async function updateCategory(req, res) {
   try {
-    const { name } = req.body
+    const { name, icon_id } = req.body
     const { id } = req.params
-    await db.updateCategory(id, name)
+    await db.updateCategory(id, name, icon_id)
     res.sendStatus(200)
   } catch (err) {
     console.error("Error updating category:", err)

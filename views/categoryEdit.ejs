@@ -9,9 +9,16 @@
   <body>
     <button id="addCategoryBtn">Add New Category</button>
 
-    <ul class="categoryList">
+    <ul class="categoryEditorList">
       <% categoryRows.forEach(category => { %>
-      <li class="categoryItem" data-id="<%= category.id %>">
+      <li class="categoryEditItem" data-id="<%= category.id %>">
+        <!-- icon -->
+        <div class="categoryIcon">
+          <% if (category.icon_svg) { %> <%- category.icon_svg %> <% } else { %>
+          <img src="/icons/default.svg" alt="Default icon" />
+          <% } %>
+        </div>
+        <!-- icon -->
         <span><%= category.name %></span>
         <button class="editBtn">Edit</button>
         <button class="deleteBtn">Delete</button>
@@ -23,6 +30,10 @@
       <form id="categoryForm">
         <label for="categoryName">Name:</label>
         <input type="text" id="categoryName" name="name" required />
+
+        <fieldset id="iconSelector" class="iconSelector">
+          <!-- icons will be dynamically injected here -->
+        </fieldset>
         <button type="submit">Save</button>
         <button type="button" id="cancelBtn">Cancel</button>
       </form>

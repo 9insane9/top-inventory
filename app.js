@@ -9,6 +9,7 @@ const categoryRouter = require("./routes/categoryRouter")
 const resetRouter = require("./routes/resetRouter")
 const itemRouter = require("./routes/itemRouter")
 const apiRouter = require("./routes/apiRouter")
+const iconRouter = require("./routes/icons")
 
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
@@ -37,6 +38,7 @@ app.use("/reset", resetRouter)
 app.use("/api", apiRouter)
 app.use("/categories", categoryRouter)
 app.use("/items", itemRouter)
+app.use("/api/icons", iconRouter)
 
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "public", "404.html"))

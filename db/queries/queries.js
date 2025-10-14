@@ -1,4 +1,4 @@
-const pool = require("../db/pool")
+const pool = require("../pool")
 
 //single entries
 async function getCategoryById(id) {
@@ -47,17 +47,35 @@ async function getItemsByCategory(categoryId) {
 }
 
 async function getCategories() {
-  const { rows } = await pool.query("SELECT * FROM categories ORDER BY id ASC")
+  const query1 = `SELECT * FROM categories ORDER BY id ASC`
+
+  const query2 = `
+    SELECT 
+      c.id,
+      c.name,
+      i.svg AS icon_svg
+    FROM categories c
+    LEFT JOIN icons i ON c.icon_id = i.id
+    ORDER BY c.id ASC;
+  `
+
+  const { rows } = await pool.query(query2)
   return rows
 }
 
 // categories
-async function addCategory(name) {
-  await pool.query("INSERT INTO categories (name) VALUES ($1)", [name])
+async function addCategory(name, icon_id) {
+  await pool.query("INSERT INTO categories (name, icon_id) VALUES ($1, $2)", [
+    name,
+    icon_id,
+  ])
 }
 
-async function updateCategory(id, name) {
-  await pool.query("UPDATE categories SET name = $1 WHERE id = $2", [name, id])
+async function updateCategory(id, name, icon_id) {
+  await pool.query(
+    "UPDATE categories SET name = $1, icon_id = $2 WHERE id = $3",
+    [name, icon_id, id]
+  )
 }
 
 async function deleteCategory(id) {

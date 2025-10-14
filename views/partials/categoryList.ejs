@@ -1,18 +1,42 @@
 <ul class="categoryList">
   <li class="category <%= categoryId === undefined ? 'currentCategory' : ''%>">
-    <a href="/categories/">All</a>
+    <a href="/categories">
+      <div class="categoryIcon">
+        <img src="/icons/all.svg" alt="all button" />
+      </div>
+      <span class="categoryName">All</span>
+    </a>
   </li>
   <% categoryRows.forEach(category => { %>
   <li
-    class="category <%= categoryId === category.id ? 'currentCategory' : ''%>"
+    class="categoryCard <%= categoryId === category.id ? 'currentCategory' : ''%>"
   >
-    <a href="/categories/<%=category.id%>"><%=category.name%></a>
+    <a href="/categories/<%=category.id%>">
+      <!-- icon -->
+      <div class="categoryIcon">
+        <% if (category.icon_svg) { %> <%- category.icon_svg %> <% } else { %>
+        <img src="/icons/default.svg" alt="Default icon" />
+        <% } %>
+      </div>
+      <!-- icon -->
+      <span class="categoryName"><%=category.name%></span>
+    </a>
   </li>
   <% }) %>
-  <li class="category <%= categoryId === null ? 'currentCategory' : ''%>">
-    <a href="/categories/uncategorized">Uncategorized</a>
+  <li class="categoryCard <%= categoryId === null ? 'currentCategory' : ''%>">
+    <a href="/categories/uncategorized">
+      <div class="categoryIcon">
+        <img src="/icons/uncategorized.svg" alt="uncategorized button" />
+      </div>
+      <span class="categoryName">Uncategorized</span>
+    </a>
   </li>
-  <li class="category">
-    <a href="/categories/edit">Edit</a>
+  <li class="categoryCard">
+    <a href="/categories/edit">
+      <div class="categoryIcon">
+        <img src="/icons/edit.svg" alt="edit button" />
+      </div>
+      <span class="categoryName">Edit</span>
+    </a>
   </li>
 </ul>

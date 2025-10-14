@@ -3,12 +3,15 @@ const form = document.getElementById("categoryForm")
 const nameInput = document.getElementById("categoryName")
 const addBtn = document.getElementById("addCategoryBtn")
 
+const iconContainer = document.getElementById("iconSelector")
+
 let currentId = null // null = add, number = edit
 
 // dialog
-addBtn.addEventListener("click", () => {
+addBtn.addEventListener("click", async () => {
   currentId = null
   nameInput.value = ""
+  await loadIcons()
   dialog.showModal()
 })
 
@@ -24,6 +27,7 @@ document.querySelectorAll(".editBtn").forEach((btn) => {
       const category = await res.json()
       nameInput.value = category.name
 
+      await loadIcons(category.icon_id) // 🆕 render icons before showing dialog
       dialog.showModal()
     } catch (err) {
       console.error("Failed to fetch category data:", err)
@@ -32,18 +36,48 @@ document.querySelectorAll(".editBtn").forEach((btn) => {
   })
 })
 
+// icon helper
+async function loadIcons(preselectedIconId = null) {
+  try {
+    const res = await fetch("/api/icons")
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const icons = await res.json()
+
+    iconContainer.innerHTML = icons
+      .map(
+        (icon) => `
+        <label class="iconOption">
+          <input
+            type="radio"
+            name="icon"
+            value="${icon.id}"
+            ${icon.id === preselectedIconId ? "checked" : ""}
+          />
+          <span class="iconPreview">${icon.svg}</span>
+        </label>
+      `
+      )
+      .join("")
+  } catch (err) {
+    console.error("Failed to load icons:", err)
+  }
+}
+
 // cancel
 document.getElementById("cancelBtn").addEventListener("click", () => {
   dialog.close()
 })
 
-// submission
 form.addEventListener("submit", async (e) => {
   e.preventDefault()
 
   const name = nameInput.value.trim()
   if (!name) return
 
+  const selectedIconRadio = iconContainer.querySelector(
+    "input[name='icon']:checked"
+  )
+  const icon_id = selectedIconRadio ? Number(selectedIconRadio.value) : null
   const method = currentId ? "PUT" : "POST"
   const url = currentId ? `/categories/${currentId}` : "/categories/new"
 
@@ -51,7 +85,7 @@ form.addEventListener("submit", async (e) => {
     const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, icon_id }),
     })
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`)

@@ -1,4 +1,4 @@
-const db = require("../db/queries")
+const db = require("../db/queries/queries")
 
 async function addItem(req, res) {
   const { name, price, quantity } = req.body
