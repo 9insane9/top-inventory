@@ -9,7 +9,7 @@ const categoryRouter = require("./routes/categoryRouter")
 const resetRouter = require("./routes/resetRouter")
 const itemRouter = require("./routes/itemRouter")
 const apiRouter = require("./routes/apiRouter")
-const iconRouter = require("./routes/icons")
+const iconRouter = require("./routes/iconRouter")
 
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
@@ -32,13 +32,17 @@ const PORT = process.env.PORT || 3000
 // itemRouter
 
 // items/new                    --for adding new items
-// items/:itemId                --for updating/removing particular items
+// items/:itemId
+//         --for updating/removing particular items
 
-app.use("/reset", resetRouter)
-app.use("/api", apiRouter)
+app.get("/", (req, res) => {
+  res.redirect("/categories")
+})
 app.use("/categories", categoryRouter)
 app.use("/items", itemRouter)
-app.use("/api/icons", iconRouter)
+app.use("/reset", resetRouter)
+app.use("/api", apiRouter)
+app.use("/icons", iconRouter)
 
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "public", "404.html"))

@@ -39,7 +39,7 @@ document.querySelectorAll(".editBtn").forEach((btn) => {
 // icon helper
 async function loadIcons(preselectedIconId = null) {
   try {
-    const res = await fetch("/api/icons")
+    const res = await fetch("/icons")
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const icons = await res.json()
 

@@ -8,7 +8,8 @@
   </head>
   <body>
     <button id="addCategoryBtn">Add New Category</button>
-
+    <a href="/categories"><button id="backBtn">Back</button></a>
+    <button id="manageIconsBtn" class="dialogTrigger">Manage Icons</button>
     <ul class="categoryEditorList">
       <% categoryRows.forEach(category => { %>
       <li class="categoryEditItem" data-id="<%= category.id %>">
@@ -38,7 +39,28 @@
         <button type="button" id="cancelBtn">Cancel</button>
       </form>
     </dialog>
+    <dialog id="iconManagerDialog">
+      <form method="dialog" class="iconManagerForm">
+        <h2>Icon Manager</h2>
 
+        <!-- Add New Icon -->
+        <div class="addIconSection">
+          <label for="newIconInput">Paste SVG Code:</label>
+          <textarea id="newIconInput" placeholder="<svg>...</svg>"></textarea>
+          <button type="button" id="addIconBtn">Add Icon</button>
+        </div>
+
+        <hr />
+
+        <!-- Icon List -->
+        <div id="iconList" class="iconList"></div>
+
+        <menu>
+          <button value="cancel" id="closeIconManager">Close</button>
+        </menu>
+      </form>
+    </dialog>
     <script src="/scripts/categoryEdit.js"></script>
+    <script src="/scripts/iconEdit.js"></script>
   </body>
 </html>
