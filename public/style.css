@@ -238,13 +238,13 @@ body {
   margin-bottom: 80px;
 }
 
-/* Base striping */
+/* striping */
 .itemList .item:nth-child(even),
 .categoryEditorList .categoryEditItem:nth-child(even) {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Hover effect — should always override stripe */
+/* override stripe */
 .itemList .item:hover,
 .categoryEditorList .categoryEditItem:hover {
   background-color: var(--hover-color);
@@ -470,7 +470,7 @@ fieldset {
   display: none;
 }
 
-/* style the icon container */
+/*icon container */
 .iconOption .iconPreview {
   display: inline-flex;
   padding: 0.25rem;

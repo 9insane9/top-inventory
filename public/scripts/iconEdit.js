@@ -19,40 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
     location.reload()
   })
 
-  // load icons
-  // async function loadIcons() {
-  //   iconList.innerHTML = "<p>Loading icons...</p>"
-  //   try {
-  //     const res = await fetch("/icons")
-  //     const icons = await res.json()
-
-  //     iconList.innerHTML = ""
-
-  //     icons.forEach((icon) => {
-  //       const wrapper = document.createElement("div")
-  //       wrapper.classList.add("iconEntry")
-  //       wrapper.innerHTML = `
-  //         <div class="iconPreview">${icon.svg}</div>
-  //         <button data-id="${icon.id}" class="deleteIconBtn" type="button">Delete</button>
-  //       `
-  //       iconList.appendChild(wrapper)
-  //     })
-
-  //     // attach delete handlers
-  //     document.querySelectorAll(".deleteIconBtn").forEach((btn) => {
-  //       btn.addEventListener("click", async (e) => {
-  //         errorContainer.innerHTML = null
-  //         const id = e.target.dataset.id
-  //         await fetch(`/icons/${id}`, { method: "DELETE" })
-  //         loadIcons()
-  //       })
-  //     })
-  //   } catch (err) {
-  //     iconList.innerHTML = "<p>Failed to load icons.</p>"
-  //     console.error(err)
-  //   }
-  // }
-
   // load icons in icon manager dialog
   async function loadIcons() {
     iconList.innerHTML = "<p>Loading icons...</p>"
@@ -97,8 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // error stuff
-
-  // addIconBtn.parentNode.insertBefore(errorContainer, addIconBtn.nextSibling)
 
   addBtn.addEventListener("click", async () => {
     const svg = newIconInput.value.trim()
