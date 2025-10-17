@@ -5,7 +5,7 @@ const resetRouter = express.Router()
 
 resetRouter.post("/", async (req, res) => {
   ///remove 'false' flag for production
-  await resetDb(false)
+  await resetDb(true)
   console.log("Db reset!")
   res.redirect("/categories")
 })

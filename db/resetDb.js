@@ -163,5 +163,6 @@ async function resetDb(isProd = true) {
 module.exports = resetDb
 
 if (require.main === module) {
+  //flag?
   resetDb(false)
 }
