@@ -17,11 +17,9 @@ async function getIcons(req, res) {
 async function addIcon(req, res) {
   try {
     const { svg } = req.body
-
     if (!svg) {
       return res.status(400).json({ error: "SVG data is required" })
     }
-
     await addCategoryIcon(svg)
     res.status(201).json({ message: "Icon added successfully" })
   } catch (err) {

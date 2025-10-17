@@ -5,19 +5,27 @@ const nameInput = document.getElementById("itemNameInput")
 const priceInput = document.getElementById("itemPriceInput")
 const quantityInput = document.getElementById("itemQuantityInput")
 const categoryChecklist = document.getElementById("categoryChecklist")
+const errorContainer = document.getElementById("itemErrors")
+const allCheckBoxes = document.querySelectorAll("input[type='checkbox']")
 
 let currentId = null // null = add, number = edit
 
 // dialog
 addBtn.addEventListener("click", () => {
+  errorContainer.innerHTML = ""
   currentId = null
   nameInput.value = ""
+  priceInput.value = ""
+  quantityInput.value = ""
+
+  allCheckBoxes.forEach((cb) => (cb.checked = false))
   dialog.showModal()
 })
 
 // edit
-document.querySelectorAll(".editItemBtn").forEach((btn) => {
+document.querySelectorAll(".item").forEach((btn) => {
   btn.addEventListener("click", async (e) => {
+    errorContainer.innerHTML = ""
     const li = e.target.closest("li")
     currentId = li.dataset.id
 
@@ -55,15 +63,13 @@ document.getElementById("cancelBtn").addEventListener("click", () => {
   dialog.close()
 })
 
-// submit
 form.addEventListener("submit", async (e) => {
   e.preventDefault()
+  errorContainer.innerHTML = ""
 
   const name = nameInput.value.trim()
-  const price = document.getElementById("itemPriceInput").value.trim()
-  const quantity = document.getElementById("itemQuantityInput").value.trim()
-
-  if (!name || !price || !quantity) return alert("Please fill all fields")
+  const price = priceInput.value.trim()
+  const quantity = quantityInput.value.trim()
 
   const categoryIds = Array.from(
     categoryChecklist.querySelectorAll("input[type=checkbox]:checked")
@@ -73,36 +79,57 @@ form.addEventListener("submit", async (e) => {
   const url = currentId ? `/items/${currentId}` : "/items/new"
 
   try {
-    // update main item data
+    //
     const resItem = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, price, quantity }),
     })
 
-    if (!resItem.ok) throw new Error(`HTTP ${resItem.status}`)
+    const itemData = await resItem.json()
 
-    // update categories for item
+    if (!resItem.ok) {
+      // Display server-side validation errors
+      if (itemData.errors && Array.isArray(itemData.errors)) {
+        errorContainer.innerHTML = itemData.errors
+          .map((err) => `<p class="error">${err.msg}</p>`)
+          .join("")
+      } else if (itemData.error) {
+        errorContainer.innerHTML = `<p class="error">${itemData.error}</p>`
+      }
+      return
+    }
+
+    // submit category updates (only for edits)
     if (currentId) {
       const resCats = await fetch(`/items/${currentId}/categories`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ categoryIds }),
       })
-      if (!resCats.ok) throw new Error(`HTTP ${resCats.status}`)
+
+      if (!resCats.ok) {
+        const catData = await resCats.json()
+        errorContainer.innerHTML = catData.error
+          ? `<p class="error">${catData.error}</p>`
+          : "<p class='error'>Failed to update categories</p>"
+        return
+      }
     }
 
     dialog.close()
     location.reload()
   } catch (err) {
     console.error("Error saving item or categories:", err)
-    alert("Failed to save item")
+    errorContainer.innerHTML = "<p class='error'>Failed to save item</p>"
   }
 })
 
 // delete
 document.querySelectorAll(".deleteItemBtn").forEach((btn) => {
   btn.addEventListener("click", async (e) => {
+    e.stopPropagation()
+
     if (!confirm("Delete this item?")) return
     const li = e.target.closest("li")
     const id = li.dataset.id

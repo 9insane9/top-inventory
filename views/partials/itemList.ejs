@@ -2,12 +2,22 @@
   <% itemRows.forEach(item => { %>
 
   <li class="item" data-id="<%= item.id %>">
-    <span class="itemName"><%=item.name%></span>
-    <span class="itemPrice"><%=item.price%></span>
-    <span class="itemQuantity"><%=item.quantity%></span>
+    <div class="itemInfo">
+      <span class="itemName"><%=item.name%></span>
+      <div class="priceContainer">
+        <span class="itemPrice"><%=item.price%></span>
+        <img src="/icons/money.svg" alt="money" class="itemListIcon" />
+      </div>
+      <div class="quantityContainer">
+        <span class="itemQuantity"><%=item.quantity%></span>
+        <img src="/icons/stack.svg" alt="stock" class="itemListIcon" />
+      </div>
+    </div>
+
     <div class="itemControls">
-      <button class="editItemBtn">Edit</button>
-      <button class="deleteItemBtn">Delete</button>
+      <button class="deleteItemBtn">
+        <img src="/icons/delete.svg" alt="delete item button" />
+      </button>
     </div>
   </li>
   <% }) %>

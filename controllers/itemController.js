@@ -1,25 +1,33 @@
 const db = require("../db/queries/queries")
 
 async function addItem(req, res) {
+  if (req.errors) {
+    return res.status(400).json({ errors: req.errors })
+  }
+
   const { name, price, quantity } = req.body
   try {
     await db.addItem(name, price, quantity)
-    res.sendStatus(200)
+    res.status(200).json({ message: "Item saved successfully" })
   } catch (err) {
     console.error("Error adding item:", err)
-    res.sendStatus(500)
+    res.status(500).json({ error: err })
   }
 }
 
 async function updateItem(req, res) {
+  if (req.errors) {
+    return res.status(400).json({ errors: req.errors })
+  }
+
   const { id } = req.params
   const { name, price, quantity } = req.body
   try {
     await db.updateItem(id, name, price, quantity)
-    res.sendStatus(200)
+    res.status(200).json({ message: "Item updated successfully" })
   } catch (err) {
     console.error("Error updating item:", err)
-    res.sendStatus(500)
+    res.status(500).json({ error: err })
   }
 }
 

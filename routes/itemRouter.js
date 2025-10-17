@@ -7,10 +7,12 @@ const {
   setItemCategories,
 } = require("../controllers/itemController")
 
+const { validateItem } = require("../validators")
+
 const itemRouter = Router()
 
-itemRouter.post("/new", addItem)
-itemRouter.put("/:id", updateItem)
+itemRouter.post("/new", validateItem, addItem)
+itemRouter.put("/:id", validateItem, updateItem)
 itemRouter.delete("/:id", deleteItem)
 
 itemRouter.get("/:id/categories", getItemCategories)

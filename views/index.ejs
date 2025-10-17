@@ -7,30 +7,53 @@
     <title>General store</title>
   </head>
   <body>
-    <form action="/reset" method="POST">
-      <button type="submit">Reset Database</button>
-    </form>
-    <button id="addItemBtn">Add Item</button>
+    <div class="app-wrapper">
+      <%- include('partials/categoryList', {categoryRows}) %> <%-
+      include('partials/itemList', {itemRows}) %>
 
-    <%- include('partials/categoryList', {categoryRows}) %> <%-
-    include('partials/itemList', {itemRows}) %>
+      <dialog id="itemDialog">
+        <ul id="itemErrors" class="errors"></ul>
+        <form id="itemForm" spellcheck="false">
+          <fieldset class="itemInputsSet">
+            <label for="itemNameInput">Name:</label>
+            <input type="text" id="itemNameInput" name="name" />
+            <label for="itemPriceInput">Price:</label>
+            <input type="number" id="itemPriceInput" name="price" />
+            <label for="itemQuantityInput">Quantity:</label>
+            <input type="number" id="itemQuantityInput" name="quantity" />
+          </fieldset>
+          <fieldset class="itemCategoriesSet">
+            <%- include('partials/categoryChecklist', { categories: categoryRows
+            }) %>
+          </fieldset>
 
-    <dialog id="itemDialog">
-      <form id="itemForm">
-        <label for="itemNameInput">Name:</label>
-        <input type="text" id="itemNameInput" name="name" required />
-        <label for="itemPriceInput">Price:</label>
-        <input type="number" id="itemPriceInput" name="price" required />
-        <label for="itemQuantityInput">Quantity:</label>
-        <input type="number" id="itemQuantityInput" name="quantity" required />
-        <%- include('partials/categoryChecklist', { categories: categoryRows })
-        %>
-        <div class="itemFormControls">
-          <button type="submit">Save</button>
-          <button type="button" id="cancelBtn">Cancel</button>
-        </div>
-      </form>
-    </dialog>
+          <div class="dialogControls">
+            <button type="button" id="cancelBtn" class="cancelBtn">
+              <img src="/icons/cancel.svg" alt="cancel" />
+            </button>
+            <button type="submit" class="saveBtn">
+              <img src="/icons/save.svg" alt="save" />
+            </button>
+          </div>
+        </form>
+      </dialog>
+
+      <div class="bottomMenu">
+        <form
+          action="/reset"
+          spellcheck="false"
+          method="POST"
+          class="restartForm"
+        >
+          <button type="submit" class="restartBtn">
+            <img src="/icons/restart.svg" alt="reset database button" />
+          </button>
+        </form>
+        <button id="addItemBtn">
+          <img src="/icons/add.svg" alt="add item button" />
+        </button>
+      </div>
+    </div>
 
     <script src="/scripts/itemEdit.js"></script>
   </body>

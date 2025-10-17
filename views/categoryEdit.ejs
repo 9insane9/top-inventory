@@ -7,59 +7,84 @@
     <title>General Store</title>
   </head>
   <body>
-    <button id="addCategoryBtn">Add New Category</button>
-    <a href="/categories"><button id="backBtn">Back</button></a>
-    <button id="manageIconsBtn" class="dialogTrigger">Manage Icons</button>
     <ul class="categoryEditorList">
       <% categoryRows.forEach(category => { %>
       <li class="categoryEditItem" data-id="<%= category.id %>">
-        <!-- icon -->
-        <div class="categoryIcon">
-          <% if (category.icon_svg) { %> <%- category.icon_svg %> <% } else { %>
-          <img src="/icons/default.svg" alt="Default icon" />
-          <% } %>
+        <div class="categoryEditItemInfo">
+          <div class="categoryIcon">
+            <% if (category.icon_svg) { %> <%- category.icon_svg %> <% } else {
+            %>
+            <img src="/icons/default.svg" alt="Default icon" />
+            <% } %>
+          </div>
+
+          <span><%= category.name %></span>
         </div>
-        <!-- icon -->
-        <span><%= category.name %></span>
-        <button class="editBtn">Edit</button>
-        <button class="deleteBtn">Delete</button>
+        <button class="deleteBtn">
+          <img src="/icons/delete.svg" alt="delete category button" />
+        </button>
       </li>
       <% }) %>
     </ul>
 
     <dialog id="categoryDialog">
-      <form id="categoryForm">
-        <label for="categoryName">Name:</label>
-        <input type="text" id="categoryName" name="name" required />
+      <ul id="categoryErrors" class="errors"></ul>
+      <form id="categoryForm" spellcheck="false">
+        <fieldset class="categoryNameInputSet">
+          <label for="categoryName">Name:</label>
+          <input type="text" id="categoryName" name="name" />
+        </fieldset>
 
         <fieldset id="iconSelector" class="iconSelector">
-          <!-- icons will be dynamically injected here -->
+          <!-- icons here -->
         </fieldset>
-        <button type="submit">Save</button>
-        <button type="button" id="cancelBtn">Cancel</button>
+        <div class="dialogControls">
+          <button type="button" id="cancelBtn" class="cancelBtn">
+            <img src="/icons/cancel.svg" alt="cancel" />
+          </button>
+          <button type="submit" class="saveBtn">
+            <img src="/icons/save.svg" alt="save" />
+          </button>
+        </div>
       </form>
     </dialog>
-    <dialog id="iconManagerDialog">
-      <form method="dialog" class="iconManagerForm">
-        <h2>Icon Manager</h2>
 
-        <!-- Add New Icon -->
+    <dialog id="iconManagerDialog">
+      <form method="dialog" class="iconManagerForm" spellcheck="false">
+        <ul class="iconErrors errors"></ul>
         <div class="addIconSection">
           <label for="newIconInput">Paste SVG Code:</label>
-          <textarea id="newIconInput" placeholder="<svg>...</svg>"></textarea>
-          <button type="button" id="addIconBtn">Add Icon</button>
+          <div class="newIconInputAndBtn">
+            <input type="text" id="newIconInput" placeholder="<svg>...</svg>" />
+            <button type="button" id="addIconBtn">
+              <img src="/icons/save.svg" alt="save" />
+            </button>
+          </div>
         </div>
 
         <hr />
 
-        <!-- Icon List -->
         <div id="iconList" class="iconList"></div>
 
         <menu>
-          <button value="cancel" id="closeIconManager">Close</button>
+          <button value="cancel" id="closeIconManager">
+            <img src="/icons/cancel.svg" alt="close" />
+          </button>
         </menu>
       </form>
     </dialog>
+    <div class="bottomMenu">
+      <a href="/categories"
+        ><button id="backBtn">
+          <img src="/icons/back.svg" alt="back button" /></button
+      ></a>
+      <button id="manageIconsBtn" class="dialogTrigger">
+        <img src="/icons/gallery.svg" alt="edit icons button" />
+      </button>
+      <button id="addCategoryBtn">
+        <img src="/icons/add.svg" alt="add category button" />
+      </button>
+    </div>
     <script src="/scripts/categoryEdit.js"></script>
     <script src="/scripts/iconEdit.js"></script>
   </body>

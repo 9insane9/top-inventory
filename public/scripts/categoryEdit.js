@@ -2,21 +2,25 @@ const dialog = document.getElementById("categoryDialog")
 const form = document.getElementById("categoryForm")
 const nameInput = document.getElementById("categoryName")
 const addBtn = document.getElementById("addCategoryBtn")
-
 const iconContainer = document.getElementById("iconSelector")
+const errorContainer = document.getElementById("categoryErrors")
 
 let currentId = null // null = add, number = edit
 
 // dialog
 addBtn.addEventListener("click", async () => {
+  errorContainer.innerHTML = ""
   currentId = null
   nameInput.value = ""
+
   await loadIcons()
   dialog.showModal()
 })
 
-document.querySelectorAll(".editBtn").forEach((btn) => {
+// edit
+document.querySelectorAll(".categoryEditItem").forEach((btn) => {
   btn.addEventListener("click", async (e) => {
+    errorContainer.innerHTML = ""
     const li = e.target.closest("li")
     currentId = li.dataset.id
 
@@ -27,7 +31,7 @@ document.querySelectorAll(".editBtn").forEach((btn) => {
       const category = await res.json()
       nameInput.value = category.name
 
-      await loadIcons(category.icon_id) // 🆕 render icons before showing dialog
+      await loadIcons(category.icon_id)
       dialog.showModal()
     } catch (err) {
       console.error("Failed to fetch category data:", err)
@@ -72,12 +76,12 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault()
 
   const name = nameInput.value.trim()
-  if (!name) return
 
   const selectedIconRadio = iconContainer.querySelector(
     "input[name='icon']:checked"
   )
   const icon_id = selectedIconRadio ? Number(selectedIconRadio.value) : null
+
   const method = currentId ? "PUT" : "POST"
   const url = currentId ? `/categories/${currentId}` : "/categories/new"
 
@@ -88,7 +92,19 @@ form.addEventListener("submit", async (e) => {
       body: JSON.stringify({ name, icon_id }),
     })
 
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    errorContainer.innerHTML = "" // clear previous errors
+
+    if (!res.ok) {
+      if (res.status === 400) {
+        const data = await res.json()
+        errorContainer.innerHTML = data.errors
+          .map((err) => `<li class="error">${err.msg}</li>`)
+          .join("")
+        return
+      }
+      throw new Error(`HTTP ${res.status}`)
+    }
+
     dialog.close()
     location.reload()
   } catch (err) {
@@ -100,6 +116,7 @@ form.addEventListener("submit", async (e) => {
 // deletes
 document.querySelectorAll(".deleteBtn").forEach((btn) => {
   btn.addEventListener("click", async (e) => {
+    e.stopImmediatePropagation()
     if (!confirm("Delete this category?")) return
 
     const li = e.target.closest("li")

@@ -5,45 +5,90 @@ document.addEventListener("DOMContentLoaded", () => {
   const iconList = document.getElementById("iconList")
   const addBtn = document.getElementById("addIconBtn")
   const newIconInput = document.getElementById("newIconInput")
+  const errorContainer = document.querySelector(".iconErrors")
 
-  // Open dialog
+  // open dialog
   openBtn.addEventListener("click", () => {
     dialog.showModal()
     loadIcons()
   })
 
-  // Close dialog
+  // close dialog
   closeBtn.addEventListener("click", () => {
     dialog.close()
     location.reload()
   })
 
-  // Load icons
+  // load icons
+  // async function loadIcons() {
+  //   iconList.innerHTML = "<p>Loading icons...</p>"
+  //   try {
+  //     const res = await fetch("/icons")
+  //     const icons = await res.json()
+
+  //     iconList.innerHTML = ""
+
+  //     icons.forEach((icon) => {
+  //       const wrapper = document.createElement("div")
+  //       wrapper.classList.add("iconEntry")
+  //       wrapper.innerHTML = `
+  //         <div class="iconPreview">${icon.svg}</div>
+  //         <button data-id="${icon.id}" class="deleteIconBtn" type="button">Delete</button>
+  //       `
+  //       iconList.appendChild(wrapper)
+  //     })
+
+  //     // attach delete handlers
+  //     document.querySelectorAll(".deleteIconBtn").forEach((btn) => {
+  //       btn.addEventListener("click", async (e) => {
+  //         errorContainer.innerHTML = null
+  //         const id = e.target.dataset.id
+  //         await fetch(`/icons/${id}`, { method: "DELETE" })
+  //         loadIcons()
+  //       })
+  //     })
+  //   } catch (err) {
+  //     iconList.innerHTML = "<p>Failed to load icons.</p>"
+  //     console.error(err)
+  //   }
+  // }
+
+  // load icons in icon manager dialog
   async function loadIcons() {
     iconList.innerHTML = "<p>Loading icons...</p>"
+    errorContainer.innerHTML = "" // clear previous errors
+
     try {
       const res = await fetch("/icons")
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const icons = await res.json()
 
-      iconList.innerHTML = ""
+      iconList.innerHTML = "" // clear previous content
 
       icons.forEach((icon) => {
         const wrapper = document.createElement("div")
         wrapper.classList.add("iconEntry")
-        wrapper.innerHTML = `
-          <div class="iconPreview">${icon.svg}</div>
-          <button data-id="${icon.id}" class="deleteIconBtn" type="button">Delete</button>
-        `
-        iconList.appendChild(wrapper)
-      })
+        wrapper.innerHTML = `<div class="iconPreview">${icon.svg}</div>`
 
-      // Attach delete handlers
-      document.querySelectorAll(".deleteIconBtn").forEach((btn) => {
-        btn.addEventListener("click", async (e) => {
-          const id = e.target.dataset.id
-          await fetch(`/icons/${id}`, { method: "DELETE" })
-          loadIcons()
+        // click handler for deletion
+        wrapper.addEventListener("click", async () => {
+          if (!confirm("Delete this icon?")) return
+          try {
+            const delRes = await fetch(`/icons/${icon.id}`, {
+              method: "DELETE",
+            })
+            if (!delRes.ok) throw new Error(`HTTP ${delRes.status}`)
+            await loadIcons()
+          } catch (err) {
+            console.error("Failed to delete icon:", err)
+            const li = document.createElement("li")
+            li.textContent = "Failed to delete icon"
+            li.classList.add("error")
+            errorContainer.appendChild(li)
+          }
         })
+
+        iconList.appendChild(wrapper)
       })
     } catch (err) {
       iconList.innerHTML = "<p>Failed to load icons.</p>"
@@ -51,18 +96,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // add icon
+  // error stuff
+
+  // addIconBtn.parentNode.insertBefore(errorContainer, addIconBtn.nextSibling)
+
   addBtn.addEventListener("click", async () => {
     const svg = newIconInput.value.trim()
-    if (!svg) return alert("Please paste SVG code first.")
+    errorContainer.innerHTML = "" // clear previous errors
 
-    await fetch("/icons", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ svg }),
-    })
+    try {
+      const res = await fetch("/icons", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ svg }),
+      })
 
-    newIconInput.value = ""
-    loadIcons()
+      if (res.status === 400) {
+        const data = await res.json()
+        data.errors.forEach((err) => {
+          const li = document.createElement("li")
+          li.classList.add("error")
+          li.textContent = err.msg
+          errorContainer.appendChild(li)
+        })
+        return
+      }
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+
+      newIconInput.value = ""
+      await loadIcons()
+    } catch (err) {
+      console.error(err)
+      const li = document.createElement("li")
+      li.textContent = "Failed to add icon"
+      errorContainer.appendChild(li)
+    }
   })
 })

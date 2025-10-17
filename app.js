@@ -4,7 +4,6 @@ const express = require("express")
 const app = express()
 const path = require("node:path")
 
-//import routers
 const categoryRouter = require("./routes/categoryRouter")
 const resetRouter = require("./routes/resetRouter")
 const itemRouter = require("./routes/itemRouter")
@@ -19,21 +18,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static("public"))
 
 const PORT = process.env.PORT || 3000
-
-//// routers
-
-// categoryRouter
-
-// categories/                  --for "ALL" section
-// categories/edit              --for adding/removing/updating categories
-// categories/uncategorized     --for "UNCATEGORIZED" section
-// categories/:categoryId       --for browsing specific categories
-
-// itemRouter
-
-// items/new                    --for adding new items
-// items/:itemId
-//         --for updating/removing particular items
 
 app.get("/", (req, res) => {
   res.redirect("/categories")
