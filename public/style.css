@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap");
+
 :root {
   --app-width: 1000px;
 
@@ -18,9 +20,16 @@ html {
 }
 
 * {
+  font-family: "MedievalSharp", cursive;
   box-sizing: border-box;
   background-color: var(--bg-color);
   color: var(--text-color);
+}
+
+button,
+input {
+  font-family: "MedievalSharp", cursive;
+  font-size: 1.1rem;
 }
 
 body {
@@ -459,6 +468,7 @@ fieldset {
 
 .categoryCheckbox label:hover {
   cursor: pointer;
+  background-color: var(--hover-color);
 }
 
 .categoryCheckbox input:checked + label {
