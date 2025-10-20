@@ -578,3 +578,16 @@ menu * {
     padding: 0 0.75rem;
   }
 }
+
+@media only screen and (max-width: 600px) {
+  dialog {
+    position: fixed !important;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 0;
+  }
+}
