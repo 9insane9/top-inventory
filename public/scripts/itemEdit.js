@@ -20,6 +20,15 @@ addBtn.addEventListener("click", () => {
 
   allCheckBoxes.forEach((cb) => (cb.checked = false))
   dialog.showModal()
+
+  console.log(window.currentCategoryId)
+
+  if (window.currentCategoryId) {
+    const checkbox = document.querySelector(
+      `#category-${window.currentCategoryId}`
+    )
+    if (checkbox) checkbox.checked = true
+  }
 })
 
 // edit

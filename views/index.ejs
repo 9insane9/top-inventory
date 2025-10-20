@@ -23,8 +23,8 @@
             <input type="number" id="itemQuantityInput" name="quantity" />
           </fieldset>
           <fieldset class="itemCategoriesSet">
-            <%- include('partials/categoryChecklist', { categories: categoryRows
-            }) %>
+            <%- include('partials/categoryChecklist', { categories:
+            categoryRows, categoryId }) %>
           </fieldset>
 
           <div class="dialogControls">
@@ -54,7 +54,11 @@
         </button>
       </div>
     </div>
-
+    <div id="appRoot" data-category-id="<%= categoryId %>"></div>
+    <script>
+      const root = document.getElementById("appRoot")
+      window.currentCategoryId = parseInt(root.dataset.categoryId) || null
+    </script>
     <script src="/scripts/itemEdit.js"></script>
   </body>
 </html>
