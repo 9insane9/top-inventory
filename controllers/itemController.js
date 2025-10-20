@@ -6,12 +6,13 @@ async function addItem(req, res) {
   }
 
   const { name, price, quantity } = req.body
+
   try {
-    await db.addItem(name, price, quantity)
-    res.status(200).json({ message: "Item saved successfully" })
+    const newId = await db.addItem(name, price, quantity)
+    res.status(201).json({ id: newId, message: "Item saved successfully" })
   } catch (err) {
     console.error("Error adding item:", err)
-    res.status(500).json({ error: err })
+    res.status(500).json({ error: "Failed to add item" })
   }
 }
 

@@ -63,6 +63,8 @@ document.getElementById("cancelBtn").addEventListener("click", () => {
   dialog.close()
 })
 
+//submit
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault()
   errorContainer.innerHTML = ""
@@ -89,7 +91,6 @@ form.addEventListener("submit", async (e) => {
     const itemData = await resItem.json()
 
     if (!resItem.ok) {
-      // Display server-side validation errors
       if (itemData.errors && Array.isArray(itemData.errors)) {
         errorContainer.innerHTML = itemData.errors
           .map((err) => `<p class="error">${err.msg}</p>`)
@@ -100,9 +101,12 @@ form.addEventListener("submit", async (e) => {
       return
     }
 
-    // submit category updates (only for edits)
-    if (currentId) {
-      const resCats = await fetch(`/items/${currentId}/categories`, {
+    // submit category updates
+    const itemId = currentId || itemData.id
+    // console.log(itemData.name)
+
+    if (itemId) {
+      const resCats = await fetch(`/items/${itemId}/categories`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ categoryIds }),

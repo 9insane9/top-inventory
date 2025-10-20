@@ -84,10 +84,11 @@ async function deleteCategory(id) {
 
 // items
 async function addItem(name, price, quantity) {
-  await pool.query(
-    "INSERT INTO items (name, price, quantity) VALUES ($1, $2, $3)",
+  const result = await pool.query(
+    "INSERT INTO items (name, price, quantity) VALUES ($1, $2, $3) RETURNING id",
     [name, price, quantity]
-  )
+  ) //return id
+  return result.rows[0].id
 }
 
 async function updateItem(id, name, price, quantity) {
