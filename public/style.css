@@ -49,9 +49,7 @@ body {
   position: sticky;
   top: 0;
   flex-wrap: wrap;
-  /* border: 1px solid cyan; */
   list-style: none;
-  /* gap: 10px; */
   padding: 0;
   margin: 0;
   z-index: 100;
@@ -63,7 +61,6 @@ body {
   height: 100%;
   text-decoration: none;
   background: none;
-  /* border: 1px solid green; */
 }
 
 .categoryCard a {
@@ -81,10 +78,19 @@ body {
 
 .categoryIcon {
   display: flex;
-  /* border: 1px solid maroon; */
   height: 100%;
   align-items: center;
   justify-content: center;
+}
+
+/* snazzy category highlighting */
+
+.categoryList .currentCategory {
+  background-color: var(--hover-color);
+}
+
+.categoryList:hover .currentCategory {
+  background: none;
 }
 
 /* ITEMS */
