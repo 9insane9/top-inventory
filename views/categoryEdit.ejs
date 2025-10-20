@@ -36,6 +36,7 @@
         </fieldset>
 
         <fieldset id="iconSelector" class="iconSelector">
+          <p class="tooltip">Select icon:</p>
           <!-- icons here -->
         </fieldset>
         <div class="dialogControls">
@@ -53,7 +54,7 @@
       <form method="dialog" class="iconManagerForm" spellcheck="false">
         <ul class="iconErrors errors"></ul>
         <div class="addIconSection">
-          <label for="newIconInput">Paste SVG Code:</label>
+          <label for="newIconInput"></label>
           <div class="newIconInputAndBtn">
             <input type="text" id="newIconInput" placeholder="<svg>...</svg>" />
             <button type="button" id="addIconBtn">
@@ -63,7 +64,7 @@
         </div>
 
         <hr />
-
+        <p class="tooltip iconTooltip">to delete:</p>
         <div id="iconList" class="iconList"></div>
 
         <menu>

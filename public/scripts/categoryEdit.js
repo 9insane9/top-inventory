@@ -65,6 +65,11 @@ async function loadIcons(preselectedIconId = null) {
   } catch (err) {
     console.error("Failed to load icons:", err)
   }
+
+  iconContainer.insertAdjacentHTML(
+    "afterbegin",
+    '<p class="tooltip">Select icon:</p>'
+  )
 }
 
 // cancel

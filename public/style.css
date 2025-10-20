@@ -576,6 +576,19 @@ menu * {
   padding: 0.25rem;
 }
 
+/* used for tracking currently selected category when adding new items via window.variableName */
+#appRoot {
+  display: none;
+}
+
+.tooltip {
+  margin-bottom: 0.5rem;
+}
+
+.iconTooltip::before {
+  content: "Click ";
+}
+
 @media only screen and (max-width: 799px) {
   .deleteItemBtn,
   .deleteBtn {
@@ -596,8 +609,8 @@ menu * {
     max-width: 600px;
     border-radius: 0;
   }
-}
 
-#appRoot {
-  display: none;
+  .iconTooltip::before {
+    content: "Tap ";
+  }
 }
