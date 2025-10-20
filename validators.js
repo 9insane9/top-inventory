@@ -1,4 +1,5 @@
 const { body, validationResult } = require("express-validator")
+const sanitizeHtml = require("sanitize-html")
 
 const validateIcon = [
   body("svg")
@@ -7,7 +8,21 @@ const validateIcon = [
     .withMessage("SVG code cannot be empty")
     .bail()
     .matches(/^<svg[\s\S]*<\/svg>$/i)
-    .withMessage("Invalid SVG format"),
+    .withMessage("Invalid SVG format")
+    .customSanitizer((value) =>
+      sanitizeHtml(value, {
+        allowedTags: false,
+        disallowedTagsMode: "discard",
+        disallowedTags: ["script", "style"],
+        allowedAttributes: false,
+        exclusiveFilter: (frame) => {
+          for (let attr in frame.attribs) {
+            if (/^on/i.test(attr)) return true // remove event handlers
+          }
+          return false
+        },
+      })
+    ),
   async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
