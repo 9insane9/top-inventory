@@ -19,6 +19,10 @@ app.use(express.static("public"));
 
 const PORT = process.env.PORT || 3000;
 
+app.get("/health", (req, res) => {
+  return res.status(200).send("ok");
+});
+
 app.get("/", (req, res) => {
   res.redirect("/categories");
 });
@@ -27,10 +31,6 @@ app.use("/items", itemRouter);
 app.use("/reset", resetRouter);
 app.use("/api", apiRouter);
 app.use("/icons", iconRouter);
-
-app.get("/health", (req, res) => {
-  return res.status(200).send("ok");
-});
 
 app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
