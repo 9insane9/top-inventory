@@ -1,11 +1,11 @@
 #! /usr/bin/env node
 
-require("dotenv").config()
+require("dotenv").config();
 
-const { Client } = require("pg")
+const { Client } = require("pg");
 
-const localConnectionString = process.env.LOCAL_CONNECTION_STRING
-const prodConnectionString = process.env.NEON_CONNECTION_STRING
+const localConnectionString = process.env.LOCAL_CONNECTION_STRING;
+const prodConnectionString = process.env.NEON_CONNECTION_STRING;
 
 const SQL = `
 
@@ -142,27 +142,29 @@ UPDATE categories SET icon_id = 5 WHERE name = 'Potions';
 UPDATE categories SET icon_id = 6 WHERE name = 'Jewellery';
 UPDATE categories SET icon_id = 7 WHERE name = 'Books';
 
-`
+`;
 
 async function resetDb(isProd = true) {
-  const connectionString = isProd ? prodConnectionString : localConnectionString
+  const connectionString = isProd
+    ? prodConnectionString
+    : localConnectionString;
 
-  console.log("Resetting database...")
-  const client = new Client({ connectionString })
-  await client.connect()
+  console.log("Resetting database...");
+  const client = new Client({ connectionString });
+  await client.connect();
 
   try {
-    await client.query(SQL)
+    await client.query(SQL);
   } finally {
-    await client.end()
+    await client.end();
   }
 
-  console.log("Done!")
+  console.log("Done!");
 }
 
-module.exports = resetDb
+module.exports = resetDb;
 
 if (require.main === module) {
   //flag?
-  resetDb(false)
+  resetDb(false);
 }

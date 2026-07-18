@@ -1,13 +1,13 @@
-const express = require("express")
-const resetDb = require("../db/resetDb")
+const express = require("express");
+const resetDb = require("../db/resetDb");
 
-const resetRouter = express.Router()
+const resetRouter = express.Router();
 
 resetRouter.post("/", async (req, res) => {
   ///remove 'false' flag for production
-  await resetDb(true)
-  console.log("Db reset!")
-  res.redirect("/categories")
-})
+  await resetDb(true);
+  console.log("Db reset!");
+  res.redirect("/categories");
+});
 
-module.exports = resetRouter
+module.exports = resetRouter;

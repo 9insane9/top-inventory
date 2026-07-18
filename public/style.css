@@ -163,7 +163,9 @@ body {
 .item:hover,
 .categoryEditItem:hover {
   background-color: var(--hover-color);
-  cursor: url("/icons/edit.svg") 4 4, auto;
+  cursor:
+    url("/icons/edit.svg") 4 4,
+    auto;
 }
 
 .deleteItemBtn,
@@ -579,7 +581,9 @@ menu * {
 
 .iconEntry:hover {
   border: 2px solid red;
-  cursor: url("/icons/delete.svg") 4 4, auto;
+  cursor:
+    url("/icons/delete.svg") 4 4,
+    auto;
 }
 
 .iconEntry .iconPreview {
