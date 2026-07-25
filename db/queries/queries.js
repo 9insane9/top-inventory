@@ -47,7 +47,7 @@ async function getItemsByCategory(categoryId) {
 }
 
 async function getCategories() {
-  const query1 = `SELECT * FROM categories ORDER BY id ASC`;
+  // const query1 = `SELECT * FROM categories ORDER BY id ASC`;
 
   const query2 = `
     SELECT 
